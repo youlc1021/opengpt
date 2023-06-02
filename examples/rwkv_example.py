@@ -21,7 +21,7 @@ start_measures = start_measure()
 for prompt in PROMPTS:
     output = model.generate(
         prompt,
-        max_length=100,
+        max_length=300,
         temperature=1.2,
         top_k=0,
         top_p=0.5,

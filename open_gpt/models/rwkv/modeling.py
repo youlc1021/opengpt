@@ -111,6 +111,8 @@ class PIPELINE():
 class RWKVModel(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        strategy = str(self._device) + ' ' + self._precision
+        self.rwkv_model = RWKV(model=self.model, strategy=strategy)
 
     def generate(self, prompt: str,
                  max_length: int,
@@ -121,15 +123,7 @@ class RWKVModel(BaseModel):
                  do_sample:bool,
                  num_return_sequences:int,
                  **kwargs):
-        # if self._model_name_or_path.startswith('RWKV/rwkv-raven'):
-        #     prompt = f"### Instruction: {prompt}\n### Response:"
-        # else:
-        #     prompt = "\n" + prompt
-        # inputs = self.tokenizer(prompt, return_tensors="pt")
-        # output = self.model.generate(inputs["input_ids"], max_new_tokens=max_length)
-        # output = self.tokenizer.decode(output[0].tolist(), skip_special_tokens=True)
-        model = RWKV(model=self.model, strategy='cpu fp32')
-        pipeline = PIPELINE(model, self.tokenizer)
+        pipeline = PIPELINE(self.rwkv_model, self.tokenizer)
         args = PIPELINE_ARGS(temperature=temperature, top_p=top_p, top_k=top_k,  # top_k = 0 then ignore
                              alpha_frequency=0.25,
                              alpha_presence=repetition_penalty,
