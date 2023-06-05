@@ -87,7 +87,7 @@ def create_model(
             device_map=device_map,
             **kwargs,
         )
-    elif model_name.startswith('sgugger/rwkv-7b-pile') or model_name.startswith('ybelkada/rwkv-raven-1b5'):
+    elif model_name.startswith('sgugger/rwkv') or model_name.startswith('ybelkada/rwkv'):
         from .models.rwkv.modeling import RWKVModel
 
         return RWKVModel(
