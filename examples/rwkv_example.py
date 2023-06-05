@@ -3,7 +3,7 @@ from open_gpt.profile import end_measure, log_measures, start_measure, compute_m
 
 start_measures = start_measure()
 model = open_gpt.create_model(
-    'RWKV/rwkv-raven-1b5', device='cpu', precision='fp16'
+    'ybelkada/rwkv-raven-1b5', device='cpu', precision='fp32'
 )
 end_measures = end_measure(start_measures)
 log_measures(end_measures, "Model loading")
