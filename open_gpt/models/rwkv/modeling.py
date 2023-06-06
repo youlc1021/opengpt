@@ -24,3 +24,19 @@ class RWKVModel(BaseModel):
             output = self.model.generate(inputs["input_ids"], max_new_tokens=max_length)
             output = self.tokenizer.decode(output[0].tolist(), skip_special_tokens=True)
         return output
+
+    def embedding(self, prompt: str, **kwargs):
+        if self._model_name_or_path.startswith('sgugger/rwkv'):
+            prompt = f"\n{prompt}"
+        elif self._model_name_or_path.startswith('ybelkada/rwkv'):
+            prompt = f"### Instruction: {prompt}\n### Response:"
+
+        embedding = []
+        def layer_hook(module, inp, out):
+            embedding.append(out)
+
+        inputs = self.tokenizer(prompt, return_tensors="pt")
+        hook = self.model.rwkv.embeddings.register_forward_hook(layer_hook)
+        output = self.model.forward(inputs["input_ids"])
+        hook.remove()
+        return embedding

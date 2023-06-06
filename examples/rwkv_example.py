@@ -4,6 +4,9 @@ from open_gpt.profile import end_measure, log_measures, start_measure, compute_m
 start_measures = start_measure()
 model = open_gpt.create_model(
     'ybelkada/rwkv-raven-1b5', device='cpu', precision='fp32'
+    # 'sgugger/rwkv-430M-pile', device='cpu', precision='fp32'
+    # 'sgugger/rwkv-7b-pile', device='cpu', precision='fp32'
+
 )
 end_measures = end_measure(start_measures)
 log_measures(end_measures, "Model loading")
@@ -20,6 +23,7 @@ PROMPTS = [
 start_measures = start_measure()
 for prompt in PROMPTS:
     output = model.generate(
+    # output = model.embedding(
         prompt,
         max_length=300,
         temperature=1.2,
